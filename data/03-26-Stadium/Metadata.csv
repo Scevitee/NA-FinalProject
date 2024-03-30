@@ -1,0 +1,2 @@
+version,device name,recording epoch time,recording time,recording timezone,platform,appVersion,device id,sensors,sampleRateMs,standardisation
+3,SM-G998U,1711486963257,2024-03-26_21-02-43,America/New_York,android,1.31.0,57885bda-6792-41e2-bbd9-df18b62905cd,Barometer|Location|Annotation,0|0|,false
