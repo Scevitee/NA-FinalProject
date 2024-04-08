@@ -118,12 +118,12 @@ end
 
 
 """
-combine_df_vector(dfs::Vector{Any})
+stack_df_vectors(dfs::Vector{Any})
 
 Takes in a vector of dataframes and combines them into one dataframe. It adds in a column titled "sample" to indicate which
 data sample a given row comes from. 
 """
-function combine_df_vector(dfs::Vector{Any})
+function stack_df_vectors(dfs::Vector{Any})
      for i = 1:length(dfs)
           df = dfs[i]
           df.sample = fill("Sample $i", nrow(df))

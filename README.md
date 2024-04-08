@@ -63,17 +63,17 @@ This is similar to the last function, but setting `only_unique=true` removes the
 sweetwater_df_points = get_filtered_points(sweetwater_dfs, "latitude")
 ```
 
-I prefer working with the data as separate dataframes, I like the freedom I have to apply different plot attributes to it / work on the different samples individually. Sometimes, however, it can be easier instead to visualize the data as larger dataframe instead of multiple smaller ones.
+I prefer working with the data as separate dataframes, I like the freedom I have to apply different plot attributes to it / work on the different samples individually. Sometimes, however, it can be easier instead to visualize the data as a single larger dataframe instead of multiple smaller ones.
 
 ---
 
-#### `combine_df_vector(dfs::Vector{Any})`
-This combines all the dataframes in a vector into one. It also adds a new column to the dataframe titled `sample`. Items coming from the first vector will be labeled as 'sample 1', items from the second will be 'sample 2', and the pattern repeats for every index of the original vector. This allows for some simple but quick plotting
+#### `stack_df_vectors(dfs::Vector{Any})`
+This stacks all the dataframes in a vector into one. It also adds a new column to the dataframe titled `sample`. Items coming from the first vector will be labeled as 'sample 1', items from the second will be 'sample 2', and the pattern repeats for every index of the original vector. This allows for some simple but quick plotting
 
 *I'm using the filtered points here but you don't have to*
 
 ```julia
-sweetwater_single_filtered_df = combine_df_vector(sweetwater_df_points)
+sweetwater_single_filtered_df = stack_df_vectors(sweetwater_df_points)
 
 # I don't feel like typing that var name a bunch of times
 ssfd = sweetwater_single_filtered_df
