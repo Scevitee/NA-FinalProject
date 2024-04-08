@@ -136,3 +136,45 @@ function stack_df_vectors(dfs::Vector{Any})
      
      return a
 end
+
+
+
+"""
+combine_df_vectors(dfs::Vector{Any})
+
+This function takes in a vector of dataframes from the same road (similar samples).
+It will compare the vectors and average them together. Unique sample latitudes will instead 
+be appended into the new dataframe. The function assumes that you are passing in the returned value of 
+get_filtered_points, but allows for you to set already_filtered=false if the data is unfiltered
+"""
+function combine_df_vectors(dfs::Vector{Any}; already_filtered::Bool=true, round_to::Int=5)
+
+     if already_filtered
+          dfs = dfs
+     else
+          dfs = get_filtered_points(dfs; round_to=round_to)
+     end
+
+     points = Dict()
+
+     for df in dfs
+          for i = 1:length(df[!, :1])
+               if df.latitude[i] in keys(points)
+                    push!((points[df.latitude[i]]).alt, df.altitude[i])
+               else
+                    points[df.latitude[i]] = (alt=[df.altitude[i]], long=df.longitude[i])
+               end
+          end
+     end 
+
+     lats = [k for k in keys(points)]
+     longs = [v.long for v in values(points)]
+     alts = [mean(v.alt) for v in values(points)]
+
+     df = DataFrame(latitude=lats, longitude=longs, altitude=alts)
+
+     sort!(df, "latitude")
+
+     return df
+          
+end
