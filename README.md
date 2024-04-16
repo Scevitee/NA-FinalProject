@@ -110,3 +110,48 @@ plot!(filtered_sw_points[1].latitude, filtered_sw_points[1].altitude, label="sam
 plot!(filtered_sw_points[2].latitude, filtered_sw_points[2].altitude, label="sample 2", ls=:dash)
 ```
 ![](assets/average_sample_demo.png)
+
+---
+
+#### `get_spaced_nodes(x, y, n=10; fluctuation::Int=0)`
+
+Takes in a set of x and y values and returns 'n' number of equally spaced nodes. By 'equally spaced', I mean that it is sampling equally spaced indices. If your data has 100 samples, and you want 10 points from it, it returns points from the indices [1, 10, 20, 30 ... , 100] (or at least close to that) .  You can create a bit of randomness by adjusting the values of fluctuation. This causes the indices to be shifted by some value in the range [-fluctuation, fluctuation]
+
+---
+
+#### `get_all_dataframes()`
+
+** **SUPER USEFUL** ** . This is probably going to be the function you use in almost every file. It creates a Dictionary filled with dataframes from all the streets we've collected data from. The keys of the dictionary are the street names, and the values are vectors of dataframes, where each item within a vector is a dataframe representing one sample from that street. 
+
+```julia
+     all_dfs = get_all_dataframes()
+```
+     Dict{Any, Any} with 6 entries:
+
+     "Gale/West"   => Any[1011×11 DataFrame…
+     "Gale/East"   => Any[1383×11 DataFrame…
+     "Museum"      => Any[1404×11 DataFrame…
+     "Center/West" => Any[1029×11 DataFrame…
+     "Sweetwater"  => Any[790×11 DataFrame…
+     "Center/East" => Any[976×11 DataFrame…
+
+
+To access the data from a given street:
+```julia
+     gale_east_dataframes = all_dfs["Gale/East"]
+```
+
+Combine this with `stack_df_vectors` from above to easily get dataframes for a given street
+
+---
+
+#### `stack_all_streets(dict::Dict{Any, Any})`
+This is really only needed for applications in which you want to handle all of our data at once. This takes in the dictionary returned by `get_all_dataframes` and stacks them into one. It adds another column `street` to further delimit the data
+
+```julia
+     all_dfs = get_all_dataframes()
+     df = stack_all_streets(all_dfs)
+     scatter(df.longitude, df.altitude, group=df.street)
+```
+
+![](assets/stack_all_demo.png)
