@@ -1,5 +1,8 @@
+using Pkg;
+Pkg.activate(".")
+Pkg.add(["KeplerGL", "Colors", "ColorBrewer", "CSV", "DataFrames"])
+using KeplerGL, Colors, ColorBrewer, CSV, DataFrames
 include("../../datatools.jl")
-using KeplerGL, Colors, ColorBrewer
 
 all_dfs = get_all_dataframes();
 
@@ -39,20 +42,21 @@ m.window[:visible_layers_active] = false
 
 KeplerGL.add_hexagon_layer!(m, df, :latitude, :longitude,
      height_field = :altitude, enable_3d=true,
-     height_range=[1, 15],
+     height_range=[1, 13],
      height_scale="linear",
      opacity = 0.51, 
      color_aggregation="average", 
      color=colorant"rgb(23, 184,190)", color_field= :altitude,
      color_range=parse.(Colorant, ["#00939C","#5DBABF","#BAE1E2","#F8C0AA","#DD7755","#C22E00"]),
-     radius=.005;
+     radius=.003,
+     resolution=20
      )
 
 m.config[:config][:mapState][:latitude] = 29.64281657981525
 m.config[:config][:mapState][:longitude]= -82.34662554441844
 m.config[:config][:mapState][:zoom] = 16.31611563725161
-m.config[:config][:mapState][:pitch] = 48.67799192421264
-m.config[:config][:mapState][:bearing] = -56.83333333333333
+m.config[:config][:mapState][:pitch] = 56.0219971625612
+m.config[:config][:mapState][:bearing] = -57.45833333333333
 m.window[:map_legend_show] = false
 m.window[:map_legend_active] = false
 m.window[:visible_layers_show] = false
