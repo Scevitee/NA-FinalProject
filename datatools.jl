@@ -214,9 +214,9 @@ function get_spaced_nodes(x, y, n=10; fluctuation::Int=0)
     
      # @show indices
 
-     if !issorted(x)
-          sort!(x)
-     end
+     # if !issorted(x)
+     #      sort!(x)
+     # end
            
      xs = x[indices]
      ys = y[indices]

@@ -117,6 +117,8 @@ plot!(filtered_sw_points[2].latitude, filtered_sw_points[2].altitude, label="sam
 
 Takes in a set of x and y values and returns 'n' number of equally spaced nodes. By 'equally spaced', I mean that it is sampling equally spaced indices. If your data has 100 samples, and you want 10 points from it, it returns points from the indices [1, 10, 20, 30 ... , 100] (or at least close to that) .  You can create a bit of randomness by adjusting the values of fluctuation. This causes the indices to be shifted by some value in the range [-fluctuation, fluctuation]
 
+*Returns x and y points*
+
 ---
 
 #### `get_all_dataframes()`
