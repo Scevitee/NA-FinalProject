@@ -272,3 +272,16 @@ function stack_all_streets(dict::Dict{Any, Any})
      
      return combined_df
  end
+
+"""
+    scale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)
+
+Takes in a dataframe and scales the latitude and longitude to be arcseconds away from a set point.
+By default, this point is (29.64 N, -82.35 E)
+"""
+function scale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)
+    new_df = copy(df)
+    new_df.latitude = (new_df.latitude .+ lat_offset) .* 360
+    new_df.longitude = (new_df.longitude .+ long_offset) .* 360
+    return new_df
+end

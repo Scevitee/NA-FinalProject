@@ -153,7 +153,21 @@ This is really only needed for applications in which you want to handle all of o
 ```julia
      all_dfs = get_all_dataframes()
      df = stack_all_streets(all_dfs)
-     scatter(df.longitude, df.altitude, group=df.street)
+     scatter(df.longitude, df.latitude, group=df.street)
 ```
 
 ![](assets/stack_all_demo.png)
+
+---
+
+#### `scale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)`
+
+This takes in a single dataframe and scales the latitude and longitude to be arcseconds away from some set point. This point is (29.64 N , -82.35 E) by default
+
+```julia
+     df = stack_all_streets(get_all_dataframes());
+     scaled_df = scale_coordinates(df);
+
+     scatter(scaled_df.longitude, scaled_df.latitude, group=scaled_df.street, ma = 0.05, ylabel="latitude from 29.64 N [in arcseconds]", xlabel="longitude from -82.35 E  [in arcseconds]")
+```
+![](assets/scale_coord_demo.png)
