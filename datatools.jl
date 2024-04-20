@@ -127,14 +127,16 @@ Takes in a vector of dataframes and combines them into one dataframe. It adds in
 data sample a given row comes from. 
 """
 function stack_df_vectors(dfs::Vector{Any})
-     for i = 1:length(dfs)
-          df = dfs[i]
+     temp = deepcopy(dfs)
+
+     for i = 1:length(temp)
+          df = temp[i]
           df.sample = fill("Sample $i", nrow(df))
      end
 
-     a = dfs[1]
-     for i = 2:length(dfs)
-          append!(a, dfs[i])
+     a = temp[1]
+     for i = 2:length(temp)
+          append!(a, temp[i])
      end
      
      return a
@@ -233,8 +235,8 @@ dictionary are the street that the dataframes belong to. The values of the dicti
 vectors of dataframes, with each dataframe representing a sample taken on said street.
 """
  function get_all_dataframes()
-     # folders = ["Center/East", "Center/West", "Gale/East", "Gale/West", "Museum", "Newell/East", "Newell/West", "Sweetwater"]
-     folders = ["Center/East", "Center/West", "Gale/East", "Gale/West", "Museum", "Sweetwater"]
+     folders = ["Center/East", "Center/West", "Gale/East", "Gale/West", "Museum", "Newell/East", "Newell/West", "Sweetwater"]
+    #  folders = ["Center/East", "Center/West", "Gale/East", "Gale/West", "Museum", "Sweetwater"]
 
      all_dfs = Dict()
 
@@ -256,9 +258,11 @@ into a single dataframe. Columns added for "street" and "sample" of data
 
 """
 function stack_all_streets(dict::Dict{Any, Any})
-     combined_df = DataFrame()
- 
-     for (street, dfs) in dict
+    combined_df = DataFrame()
+    
+    temp = deepcopy(dict)
+
+     for (street, dfs) in temp
          street_df = stack_df_vectors(dfs)
          
          street_df.street = fill(street, nrow(street_df))
