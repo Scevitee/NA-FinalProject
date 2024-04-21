@@ -285,15 +285,15 @@ By default, this point is (29.64 N, -82.35 E)
 """
 function scale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)
     new_df = copy(df)
-    new_df.latitude = (new_df.latitude .+ lat_offset) .* 360
-    new_df.longitude = (new_df.longitude .+ long_offset) .* 360
+    new_df.latitude = (new_df.latitude .+ lat_offset) .* 3600
+    new_df.longitude = (new_df.longitude .+ long_offset) .* 3600
     return new_df
 end
 
 
 function unscale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)
     new_df = copy(df)
-    new_df.latitude = (new_df.latitude ./ 360) .- lat_offset
-    new_df.longitude = (new_df.longitude ./ 360) .- long_offset
+    new_df.latitude = (new_df.latitude ./ 3600) .- lat_offset
+    new_df.longitude = (new_df.longitude ./ 3600) .- long_offset
     return new_df
 end
