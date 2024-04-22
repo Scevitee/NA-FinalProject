@@ -305,6 +305,9 @@ function get_function_references()
     function_ref["base sigmoid"] = L"\frac{1}{1+e^{-x}}"
     function_ref["2d_1"] = L"a\sin (bx) + c\sin(dy) + ex"
     function_ref["tanh"] = L"\tanh(x)"
+    function_ref["ls_squig1"] = L"\frac{1}{1+e^{-x}} + x + \sin(x)"
+    function_ref["ls_squig2"] = L"\tanh(x) + x^2 + \cos(x)"
+    function_ref["ls_squig3"] = L"\tanh(x) + x + \frac{1}{1 + e^{-x}} + \ln(|x|)"
 
     return function_ref
 end
