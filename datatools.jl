@@ -1,4 +1,4 @@
-using CSV, DataFrames
+using CSV, DataFrames, LaTeXStrings
 
 const ROOT_PATH = @__DIR__
 const DATA_PATH = "$ROOT_PATH/data"
@@ -296,4 +296,15 @@ function unscale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_off
     new_df.latitude = (new_df.latitude ./ 3600) .- lat_offset
     new_df.longitude = (new_df.longitude ./ 3600) .- long_offset
     return new_df
+end
+
+function get_function_references()
+    function_ref = Dict()
+    function_ref["expo"] = L"e^x"
+    function_ref["gompertz"] = L"ae^{be^{-cx}}+d"
+    function_ref["base sigmoid"] = L"\frac{1}{1+e^{-x}}"
+    function_ref["2d_1"] = L"a\sin (bx) + c\sin(dy) + ex"
+    function_ref["tanh"] = L"\tanh(x)"
+
+    return function_ref
 end
