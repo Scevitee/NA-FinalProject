@@ -226,6 +226,24 @@ function get_spaced_nodes(x, y, n=10; fluctuation::Int=0)
      return xs, ys
  end
 
+ 
+ function get_spaced_nodes2d(x, y, z, n=10; fluctuation::Int=0)
+    len = length(x)
+    indices = round.(Int, LinRange(1, len, n))
+
+
+    for i = 2:length(indices)-1
+       indices[i] += rand((-1 * fluctuation):fluctuation)
+    end
+   
+    xs = x[indices]
+    ys = y[indices]
+    zs = z[indices]
+
+    return xs, ys, zs
+end
+
+
 
 """
     get_all_dataframes()
@@ -284,7 +302,7 @@ Takes in a dataframe and scales the latitude and longitude to be arcseconds away
 By default, this point is (29.64 N, -82.35 E)
 """
 function scale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)
-    new_df = copy(df)
+    new_df = deepcopy(df)
     new_df.latitude = (new_df.latitude .+ lat_offset) .* 3600
     new_df.longitude = (new_df.longitude .+ long_offset) .* 3600
     return new_df
@@ -292,7 +310,7 @@ end
 
 
 function unscale_coordinates(df::DataFrame; lat_offset::Float64=-29.64, long_offset::Float64=82.35)
-    new_df = copy(df)
+    new_df = deepcopy(df)
     new_df.latitude = (new_df.latitude ./ 3600) .- lat_offset
     new_df.longitude = (new_df.longitude ./ 3600) .- long_offset
     return new_df
@@ -308,6 +326,9 @@ function get_function_references()
     function_ref["ls_squig1"] = L"\frac{1}{1+e^{-x}} + x + \sin(x)"
     function_ref["ls_squig2"] = L"\tanh(x) + x^2 + \cos(x)"
     function_ref["ls_squig3"] = L"\tanh(x) + x + \frac{1}{1 + e^{-x}} + \ln(|x|)"
+    function_ref["sin_combo"] = L"a\sin(bx) + c\sin(dy) + tx"
+    function_ref["tanh_combo"] = L"a\tanh(x-b) - c\tanh(y+d) + \sin^3(tx)"
+    function_ref["poly"] = L"g + ax + by + cx^2 + dy^2 + tx^3 + fy^3"
 
     return function_ref
 end

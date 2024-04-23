@@ -1,16 +1,20 @@
 using Pkg;
 Pkg.activate(".")
-Pkg.add(["KeplerGL", "Colors", "ColorBrewer", "CSV", "DataFrames"])
-using KeplerGL, Colors, ColorBrewer, CSV, DataFrames
+Pkg.add(["KeplerGL", "Colors", "ColorBrewer", "CSV", "DataFrames", "LaTeXStrings"])
+using KeplerGL, Colors, ColorBrewer, CSV, DataFrames, LaTeXStrings
 include("../../datatools.jl")
 
-all_dfs = get_all_dataframes();
 
-df = stack_all_streets(all_dfs);
+### SECTION FOR INITIAL IMAGES
 
-token = KEPLER_TOKEN;
-m = KeplerGL.KeplerGLMap(token, center_map=false)
+# all_dfs = get_all_dataframes();
 
+# df = stack_all_streets(all_dfs);
+
+# token = KEPLER_TOKEN;
+# m = KeplerGL.KeplerGLMap(token, center_map=false)
+
+## 2D DISPLAY / OVERHEAD VIEW
 # KeplerGL.add_point_layer!(m, df, :latitude, :longitude,
 #      color=colorant"rgb(23, 184,190)", color_field= :altitude,
 #      color_scale = "quantile", 
@@ -31,59 +35,34 @@ m = KeplerGL.KeplerGLMap(token, center_map=false)
 
 # KeplerGL.export_image(win, "test2.png")
 
-KeplerGL.add_grid_layer!(m, df, :latitude, :longitude,
-     color=colorant"rgb(23, 184,190)", 
-     color_field= :altitude,
-     color_scale = "quantile", 
-     color_range=parse.(Colorant, ["#5A1846","#900C3F","#C70039","#E3611C","#F1920E","#FFC300"]),
-     opacity = 0.62,
-     radius = 0.005,
-     coverage = 0.95,
-     height_field = :altitude,
-     height_aggregation = "average",
-     elevation_scale=0.3,
-     enable_3d = true
+
+## 3D VIEW OF ORIGINAL DATA
+# KeplerGL.add_grid_layer!(m, df, :latitude, :longitude,
+#      color=colorant"rgb(23, 184,190)", 
+#      color_field= :altitude,
+#      color_scale = "quantile", 
+#      color_range=parse.(Colorant, ["#5A1846","#900C3F","#C70039","#E3611C","#F1920E","#FFC300"]),
+#      opacity = 0.62,
+#      radius = 0.005,
+#      coverage = 0.95,
+#      height_field = :altitude,
+#      height_aggregation = "average",
+#      elevation_scale=0.3,
+#      enable_3d = true
      
-     )
-
-m.window[:toggle_3d_show] = true
-m.window[:toggle_3d_active] = true
-m.window[:map_legend_show] = false
-m.window[:map_legend_active] = false
-m.window[:visible_layers_show] = false
-m.window[:visible_layers_active] = false
-m.config[:config][:mapState][:latitude] = 29.642973900323852
-m.config[:config][:mapState][:longitude]= -82.34761399099848
-m.config[:config][:mapState][:zoom] = 15.941926775299756
-m.config[:config][:mapState][:pitch] = 52.92875243297208
-m.config[:config][:mapState][:bearing] = 69.28753840245776
-m.window[:map_legend_show] = false
-m.window[:map_legend_active] = false
-m.window[:visible_layers_show] = false
-m.window[:visible_layers_active] = false
-m.config[:config][:mapStyle][:styleType]="dark"
-
-win = KeplerGL.render(m)
-
-KeplerGL.export_image(win, "data_3d_2.png")
-
-# KeplerGL.add_hexagon_layer!(m, df, :latitude, :longitude,
-#      height_field = :altitude, enable_3d=true,
-#      height_range=[1, 13],
-#      height_scale="linear",
-#      opacity = 0.51, 
-#      color_aggregation="average", 
-#      color=colorant"rgb(23, 184,190)", color_field= :altitude,
-#      color_range=parse.(Colorant, ["#00939C","#5DBABF","#BAE1E2","#F8C0AA","#DD7755","#C22E00"]),
-#      radius=.003,
-#      resolution=20
 #      )
 
-# m.config[:config][:mapState][:latitude] = 29.64281657981525
-# m.config[:config][:mapState][:longitude]= -82.34662554441844
-# m.config[:config][:mapState][:zoom] = 16.31611563725161
-# m.config[:config][:mapState][:pitch] = 56.0219971625612
-# m.config[:config][:mapState][:bearing] = -57.45833333333333
+# m.window[:toggle_3d_show] = true
+# m.window[:toggle_3d_active] = true
+# m.window[:map_legend_show] = false
+# m.window[:map_legend_active] = false
+# m.window[:visible_layers_show] = false
+# m.window[:visible_layers_active] = false
+# m.config[:config][:mapState][:latitude] = 29.642973900323852
+# m.config[:config][:mapState][:longitude]= -82.34761399099848
+# m.config[:config][:mapState][:zoom] = 15.941926775299756
+# m.config[:config][:mapState][:pitch] = 52.92875243297208
+# m.config[:config][:mapState][:bearing] = 69.28753840245776
 # m.window[:map_legend_show] = false
 # m.window[:map_legend_active] = false
 # m.window[:visible_layers_show] = false
@@ -92,5 +71,67 @@ KeplerGL.export_image(win, "data_3d_2.png")
 
 # win = KeplerGL.render(m)
 
-# KeplerGL.export_image(win, "test3d.png")
+# KeplerGL.export_image(win, "data_3d_2.png")
+
+
+
+### FITTED DATA VISUALS
+
+# IMPORTING IN FITTED DATA
+dfs = get_folder_dataframes("fittingCSVs");
+token = KEPLER_TOKEN;
+reds = ["#5A1846","#900C3F","#C70039","#E3611C","#F1920E","#FFC300"]
+greens = ["#FFFFCC", "#D9F0A3", "#ADDD8E", "#78C679", "#31A354", "#006834"]
+blues = ["#E6FAFA", "#C1E5E6", "#9DD0D4", "#75BBC1", "#4BA7AF", "#00939C"]
+
+mycolors = [reds, greens, blues]
+
+for i = 1:length(dfs)
+
+     m = KeplerGL.KeplerGLMap(token, center_map=false)
+     KeplerGL.add_grid_layer!(m, dfs[i], :latitude, :longitude,
+          color=colorant"rgb(23, 184,190)", 
+          color_field= :altitude,
+          color_scale = "quantile", 
+          color_range=parse.(Colorant, mycolors[i]),
+          opacity = 0.8,
+          radius = 0.005,
+          coverage = 0.95,
+          height_field = :altitude,
+          height_aggregation = "average",
+          elevation_scale=0.35,
+          enable_3d = true
+          )
+
+     m.window[:toggle_3d_show] = true
+     m.window[:toggle_3d_active] = true
+     m.window[:map_legend_show] = false
+     m.window[:map_legend_active] = false
+     m.window[:visible_layers_show] = false
+     m.window[:visible_layers_active] = false
+     m.config[:config][:mapState][:latitude] = 29.642950945605445
+     m.config[:config][:mapState][:longitude]= -82.34588977748876
+     m.config[:config][:mapState][:zoom] = 15.9
+     m.config[:config][:mapState][:pitch] = 59.93457938227795
+     m.config[:config][:mapState][:bearing] = -105.89583333333333
+     m.window[:map_legend_show] = false
+     m.window[:map_legend_active] = false
+     m.window[:visible_layers_show] = false
+     m.window[:visible_layers_active] = false
+     m.config[:config][:mapStyle][:styleType]="dark"
+
+     win = KeplerGL.render(m)
+     KeplerGL.export_image(win, "fit3d_a$(i).png")
+
+
+     m.config[:config][:mapState][:latitude] = 29.643089835166347
+     m.config[:config][:mapState][:longitude]= -82.347451321191
+     m.config[:config][:mapState][:zoom] = 15.9
+     m.config[:config][:mapState][:pitch] =  59.403312905381505
+     m.config[:config][:mapState][:bearing] = 74.0
+
+     win = KeplerGL.render(m)
+     KeplerGL.export_image(win, "fit3d_b$(i).png")
+
+end
 
